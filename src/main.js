@@ -10,8 +10,10 @@ import VueRouter from 'vue-router';
 Vue.use( VueRouter);
 
 import index from './components/index.vue'
+import detail from './components/detail.vue'
 const routes=[
-  {path:'/index',component:index}
+  {path:'/index',component:index},
+  {path:'/detail',component:detail}
 ]
 
 const router=new VueRouter({routes});
