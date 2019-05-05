@@ -48,9 +48,8 @@
                       <div class="stock-box">
                         <el-input-number
                           v-model="num"
-                          @change="handleChange"
                           :min="1"
-                          :max="10"
+                          :max="goodsinfo.stock_quantity"
                           label="描述文字"
                         ></el-input-number>
                       </div>
@@ -194,7 +193,8 @@ export default {
       totalpage: 10,
       commentList: [],
       imgList: [],
-      goodsinfoContent: ""
+      goodsinfoContent: "",
+      num:''
     };
   },
   methods: {
