@@ -78,15 +78,15 @@
               >
                 <ul>
                   <li>
-                    <a href="javascript:;" class="selected">商品介绍</a>
+                    <a href="javascript:;" @click='isDesc=!isDesc' :class="{selected:isDesc}">商品介绍</a>
                   </li>
                   <li>
-                    <a href="javascript:;">商品评论</a>
+                    <a href="javascript:;" @click='isDesc=!isDesc' :class="{selected:!isDesc}"> 商品评论</a>
                   </li>
                 </ul>
               </div>
-              <div class="tab-content entry" style="display: block;" v-html="goodsinfoContent"></div>
-              <div class="tab-content" style="display: block;">
+              <div class="tab-content entry" style="display: block;" v-html="goodsinfoContent" v-show='isDesc'></div>
+              <div class="tab-content" style="display: block;" v-show='!isDesc'>
                 <div class="comment-box">
                   <div id="commentForm" name="commentForm" class="form-box">
                     <div class="avatar-box">
@@ -194,7 +194,8 @@ export default {
       commentList: [],
       imgList: [],
       goodsinfoContent: "",
-      num:''
+      num:'',
+      isDesc:true
     };
   },
   methods: {
