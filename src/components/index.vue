@@ -193,7 +193,7 @@ export default {
     };
   },
   created() {
-    axios
+    this.$axios
       .get("http://111.230.232.110:8899/site/goods/gettopdata/goods")
       .then(res => {
         //   console.log(res);
@@ -201,7 +201,7 @@ export default {
         this.sliderlist = res.data.message.sliderlist;
         this.toplist = res.data.message.toplist;
       });
-      axios
+      this.$axios
       .get("http://111.230.232.110:8899/site/goods/getgoodsgroup")
       .then(res => {
           console.log(res);

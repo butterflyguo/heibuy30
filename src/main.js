@@ -16,6 +16,8 @@ import userCenter from './components/userCenter.vue'
 import userOrder from './components/userOrder.vue'
 import userDetail from './components/userDetail.vue'
 import login from './components/login.vue'
+import axios from 'axios'
+ Vue.prototype.$axios=axios;
 const routes=[
   {path:'/',redirect:"/index"},//重定向
   {path:'/index',component:index},
