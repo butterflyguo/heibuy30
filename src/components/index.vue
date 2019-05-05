@@ -180,7 +180,7 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
 import moment from "moment";
 export default {
   name: "index", //组件名字,
@@ -194,7 +194,7 @@ export default {
   },
   created() {
     this.$axios
-      .get("http://111.230.232.110:8899/site/goods/gettopdata/goods")
+      .get("/site/goods/gettopdata/goods")
       .then(res => {
         //   console.log(res);
         this.catelist = res.data.message.catelist;
@@ -202,7 +202,7 @@ export default {
         this.toplist = res.data.message.toplist;
       });
       this.$axios
-      .get("http://111.230.232.110:8899/site/goods/getgoodsgroup")
+      .get("/site/goods/getgoodsgroup")
       .then(res => {
           console.log(res);
         this.sectionlist = res.data.message;

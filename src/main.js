@@ -18,6 +18,7 @@ import userDetail from './components/userDetail.vue'
 import login from './components/login.vue'
 import axios from 'axios'
  Vue.prototype.$axios=axios;
+ axios.defaults.baseURL="http://111.230.232.110:8899"
 const routes=[
   {path:'/',redirect:"/index"},//重定向
   {path:'/index',component:index},

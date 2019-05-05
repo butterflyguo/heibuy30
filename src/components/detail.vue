@@ -196,7 +196,7 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
 import moment from "moment";
 export default {
   name: "detail",
@@ -217,9 +217,9 @@ export default {
         this.$message("哥们写点东西");
         return;
       }
-      axios
+      this.$axios
         .post(
-          `http://111.230.232.110:8899/site/validate/comment/post/goods/${
+          `/site/validate/comment/post/goods/${
             this.$route.params.id
           }`,
           { commenttxt: this.comment }
@@ -239,7 +239,7 @@ export default {
         });
     },
     getcomments(){
-        axios.get(`http://111.230.232.110:8899/site/comment/getbypage/goods/${this.$route.params.id}?pageIndex=${this.pageIndex}&pageSize=${this.pageSize}`).then(res=>{
+        this.$axios.get(`/site/comment/getbypage/goods/${this.$route.params.id}?pageIndex=${this.pageIndex}&pageSize=${this.pageSize}`).then(res=>{
             console.log(res)
             this.commentList=res.data.message;
             this.totalpage=res.data.totalcount
@@ -260,8 +260,8 @@ export default {
   created() {
       this.getcomments()
     const id = this.$route.params.id;
-    axios
-      .get(`http://111.230.232.110:8899/site/goods/getgoodsinfo/${id}`)
+    this.$axios
+      .get(`/site/goods/getgoodsinfo/${id}`)
       .then(res => {
         // console.log(res);
         this.goodsList = res.data.message.hotgoodslist;
