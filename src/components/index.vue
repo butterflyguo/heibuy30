@@ -108,7 +108,7 @@
           </div>
           <!--幻灯片-->
           <div class="left-705">
-            <el-carousel height="341px">
+            <el-carousel height="341px" width="705px">
               <el-carousel-item v-for="item in sliderlist" :key="item.id">
                 <img :src="item.img_url" alt="">
               </el-carousel-item>
@@ -218,4 +218,11 @@ export default {
 
 
 <style>
+.el-carousel-item {
+  width: 705px;
+}
+
+.el-carousel-item img{
+  width:705px;
+}
 </style>

@@ -129,7 +129,7 @@
                       <div class="inner-box">
                         <div class="info">
                           <span>{{ value.user_name }}</span>
-                          <span>{{ value.reply_time }}</span>
+                          <span>{{ value.reply_time|formatTime}}</span>
                         </div>
                         <p>{{ value.content }}</p>
                       </div>
@@ -145,6 +145,7 @@
                         :page-size="pageSize"
                         layout="total, sizes, prev, pager, next, jumper"
                         :total="totalpage"
+                        background
                       ></el-pagination>
                     </div>
                   </div>
@@ -159,12 +160,16 @@
                 <ul class="side-img-list">
                   <li v-for="(value,index) in goodsList" :key="index">
                     <div class="img-box">
-                      <a href="#/site/goodsinfo/90" class>
+                      <!-- <a href="#/site/goodsinfo/90" class> -->
+                      <router-link :to="'/detail/'+value.id">
                         <img :src="value.img_url">
-                      </a>
+                      </router-link>
+                      <!-- </a> -->
                     </div>
                     <div class="txt-box">
-                      <a href="#/site/goodsinfo/90" class>{{ value.title }}</a>
+                      <router-link :to="'/detail/'+value.id">{{ value.title }}
+                      <!-- <a href="#/site/goodsinfo/90" class>{{ value.title }}</a> -->
+                        </router-link>
                       <span>{{ value.add_time | formatTime }}</span>
                     </div>
                   </li>
@@ -230,21 +235,23 @@ export default {
           }&pageSize=${this.pageSize}`
         )
         .then(res => {
-          console.log(res);
+          // console.log(res);
           this.commentList = res.data.message;
           this.totalpage = res.data.totalcount;
           console.log(res.data.totalcount);
         });
     },
     handleSizeChange(val) {
+      // console.log(val);
       this.pageIndex = val;
       this.getcomments();
-      console.log(val);
     },
     handleCurrentChange(val) {
-      this.pageSize = val;
-      this.getcomments();
       console.log(val);
+       this.pageIndex = val;
+      // this.pageSize = val;
+      this.getcomments();
+      
     }
   },
   created() {
@@ -257,7 +264,21 @@ export default {
       this.goodsinfo = res.data.message.goodsinfo;
       this.imgList = res.data.message.imglist;
     });
-  }
+  },
+  //侦听器
+   watch: {
+    // 如果 `question` 发生改变，这个函数就会运行
+    "$route.params.id": function (ne, ol) {
+     this.$axios.get(`/site/goods/getgoodsinfo/${ne}`).then(res => {
+      // console.log(res);
+      this.goodsList = res.data.message.hotgoodslist;
+      this.goodsinfoContent = res.data.message.goodsinfo.content;
+      this.goodsinfo = res.data.message.goodsinfo;
+      this.imgList = res.data.message.imglist;
+      this.getcomments();
+    });
+    }
+  },
   // filters: {
   //   formatTime(value) {
   //     return moment(value).format("YYYY年MM月DD日");
