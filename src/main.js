@@ -17,6 +17,7 @@ import userOrder from './components/userOrder.vue'
 import userDetail from './components/userDetail.vue'
 import login from './components/login.vue'
 const routes=[
+  {path:'/',redirect:"/index"},//重定向
   {path:'/index',component:index},
   {path:'/detail/:id',component:detail},
   {path:'/user',component:user,
@@ -31,7 +32,7 @@ const routes=[
 {path:'/login',component:login}
 ]
 
-// const router=new VueRouter({routes});
+const router=new VueRouter({routes});
 // router.beforeEach(){
 //   axios.post('http://111.230.232.110:8899/site/account/islogin').then(res=>{
 //   if(res.code=='logined'){
@@ -39,7 +40,7 @@ const routes=[
 //   }
 //   })
 
-}
+// }
 
 
 Vue.config.productionTip = false
