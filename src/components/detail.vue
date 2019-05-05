@@ -13,25 +13,31 @@
         <div class="wrap-box">
           <div class="left-925">
             <div class="goods-box clearfix">
-              <div class="pic-box"></div>
+              <div class="pic-box">
+                <el-carousel height="330px" width="390px">
+                  <el-carousel-item v-for="item in imgList" :key="item.id">
+                    <img :src="item.original_path" alt>
+                  </el-carousel-item>
+                </el-carousel>
+              </div>
               <div class="goods-spec">
-                <h1>华为（HUAWEI）荣耀6Plus 16G双4G版</h1>
-                <p class="subtitle">双800万摄像头，八核，安卓智能手机）荣耀6plus</p>
+                <h1>{{goodsinfo.title}}</h1>
+                <p class="subtitle">{{goodsinfo.sub_title}}</p>
                 <div class="spec-box">
                   <dl>
                     <dt>货号</dt>
-                    <dd id="commodityGoodsNo">SD9102356032</dd>
+                    <dd id="commodityGoodsNo">{{goodsinfo.goods_no}}</dd>
                   </dl>
                   <dl>
                     <dt>市场价</dt>
                     <dd>
-                      <s id="commodityMarketPrice">¥2499</s>
+                      <s id="commodityMarketPrice">¥{{goodsinfo.market_price}}</s>
                     </dd>
                   </dl>
                   <dl>
                     <dt>销售价</dt>
                     <dd>
-                      <em id="commoditySellPrice" class="price">¥2195</em>
+                      <em id="commoditySellPrice" class="price">¥{{goodsinfo.sell_price}}</em>
                     </dd>
                   </dl>
                 </div>
@@ -40,39 +46,17 @@
                     <dt>购买数量</dt>
                     <dd>
                       <div class="stock-box">
-                        <div class="el-input-number el-input-number--small">
-                          <span role="button" class="el-input-number__decrease is-disabled">
-                            <i class="el-icon-minus"></i>
-                          </span>
-                          <span role="button" class="el-input-number__increase">
-                            <i class="el-icon-plus"></i>
-                          </span>
-                          <div class="el-input el-input--small">
-                            <!---->
-                            <input
-                              autocomplete="off"
-                              size="small"
-                              type="text"
-                              rows="2"
-                              max="60"
-                              min="1"
-                              validateevent="true"
-                              class="el-input__inner"
-                              role="spinbutton"
-                              aria-valuemax="60"
-                              aria-valuemin="1"
-                              aria-valuenow="1"
-                              aria-disabled="false"
-                            >
-                            <!---->
-                            <!---->
-                            <!---->
-                          </div>
-                        </div>
+                        <el-input-number
+                          v-model="num"
+                          @change="handleChange"
+                          :min="1"
+                          :max="10"
+                          label="描述文字"
+                        ></el-input-number>
                       </div>
                       <span class="stock-txt">
                         库存
-                        <em id="commodityStockNum">60</em>件
+                        <em id="commodityStockNum">{{goodsinfo.stock_quantity}}</em>件
                       </span>
                     </dd>
                   </dl>
@@ -102,7 +86,7 @@
                   </li>
                 </ul>
               </div>
-              <div class="tab-content entry" style="display: block;" v-html="goodsinfo"></div>
+              <div class="tab-content entry" style="display: block;" v-html="goodsinfoContent"></div>
               <div class="tab-content" style="display: block;">
                 <div class="comment-box">
                   <div id="commentForm" name="commentForm" class="form-box">
@@ -135,10 +119,11 @@
                     </div>
                   </div>
                   <ul id="commentList" class="list-box">
-                    <p v-show='commentList.length==0'
+                    <p
+                      v-show="commentList.length==0"
                       style="margin: 5px 0px 15px 69px; line-height: 42px; text-align: center; border: 1px solid rgb(247, 247, 247);"
                     >暂无评论，快来抢沙发吧！</p>
-                    <li v-for='(value,index) in commentList' :key='index'>
+                    <li v-for="(value,index) in commentList" :key="index">
                       <div class="avatar-box">
                         <i class="iconfont icon-user-full"></i>
                       </div>
@@ -150,7 +135,6 @@
                         <p>{{ value.content }}</p>
                       </div>
                     </li>
-                   
                   </ul>
                   <div class="page-box" style="margin: 5px 0px 0px 62px;">
                     <div id="pagination" class="digg">
@@ -203,12 +187,14 @@ export default {
   data() {
     return {
       goodsList: [],
-      goodsinfo: "",
+      goodsinfo: {},
       comment: "",
       pageIndex: 1,
       pageSize: 10,
       totalpage: 10,
-      commentList: []
+      commentList: [],
+      imgList: [],
+      goodsinfoContent: ""
     };
   },
   methods: {
@@ -218,12 +204,9 @@ export default {
         return;
       }
       this.$axios
-        .post(
-          `/site/validate/comment/post/goods/${
-            this.$route.params.id
-          }`,
-          { commenttxt: this.comment }
-        )
+        .post(`/site/validate/comment/post/goods/${this.$route.params.id}`, {
+          commenttxt: this.comment
+        })
         .then(res => {
           console.log(res);
           if (res.data.status == 0) {
@@ -234,47 +217,59 @@ export default {
           }
 
           this.comment = "";
-          this.pageIndex=1;
-          this.getcomments()
+          this.pageIndex = 1;
+          this.getcomments();
         });
     },
-    getcomments(){
-        this.$axios.get(`/site/comment/getbypage/goods/${this.$route.params.id}?pageIndex=${this.pageIndex}&pageSize=${this.pageSize}`).then(res=>{
-            console.log(res)
-            this.commentList=res.data.message;
-            this.totalpage=res.data.totalcount
-            console.log(res.data.totalcount)
-        })
+    getcomments() {
+      this.$axios
+        .get(
+          `/site/comment/getbypage/goods/${this.$route.params.id}?pageIndex=${
+            this.pageIndex
+          }&pageSize=${this.pageSize}`
+        )
+        .then(res => {
+          console.log(res);
+          this.commentList = res.data.message;
+          this.totalpage = res.data.totalcount;
+          console.log(res.data.totalcount);
+        });
     },
     handleSizeChange(val) {
-        this.pageIndex=val
-        this.getcomments()
+      this.pageIndex = val;
+      this.getcomments();
       console.log(val);
     },
     handleCurrentChange(val) {
-        this.pageSize=val
-        this.getcomments()
+      this.pageSize = val;
+      this.getcomments();
       console.log(val);
     }
   },
   created() {
-      this.getcomments()
+    this.getcomments();
     const id = this.$route.params.id;
-    this.$axios
-      .get(`/site/goods/getgoodsinfo/${id}`)
-      .then(res => {
-        // console.log(res);
-        this.goodsList = res.data.message.hotgoodslist;
-        this.goodsinfo = res.data.message.goodsinfo.content;
-      });
-  },
-  filters: {
-    formatTime(value) {
-      return moment(value).format("YYYY年MM月DD日");
-    }
+    this.$axios.get(`/site/goods/getgoodsinfo/${id}`).then(res => {
+      console.log(res);
+      this.goodsList = res.data.message.hotgoodslist;
+      this.goodsinfoContent = res.data.message.goodsinfo.content;
+      this.goodsinfo = res.data.message.goodsinfo;
+      this.imgList = res.data.message.imglist;
+    });
   }
+  // filters: {
+  //   formatTime(value) {
+  //     return moment(value).format("YYYY年MM月DD日");
+  //   }
+  // }
 };
 </script>
 
 <style>
+.el-carousel__container {
+  width: 390px;
+}
+.el-carousel__container img {
+  width: 390px;
+}
 </style>
