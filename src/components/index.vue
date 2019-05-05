@@ -132,11 +132,11 @@
         </div>
       </div>
     </div>
-    <div class="section" v-for='(value,index) in sectionlist'>
+    <div class="section" v-for='(value,index) in sectionlist' :key='index'>
       <div class="main-tit">
         <h2>{{ value.catetitle }}</h2>
         <p>
-          <a href="/goods/43.html" v-for="(item, i) in value.level2catelist" :key="index">{{item.subcatetitle}}</a>
+          <a href="/goods/43.html" v-for="(item, i) in value.level2catelist" :key="i">{{item.subcatetitle}}</a>
           <a href="/goods/40.html">
             更多
             <i>+</i>
@@ -147,7 +147,7 @@
         <div class="wrap-box">
           <ul class="img-list">
             <li v-for="(item, i) in value.datas" :key="i">
-                <router-link to="/detail">
+                <router-link :to="'/detail/'+item.artID">
               <!-- <a href="#/site/goodsinfo/87" class> -->
                 <div class="img-box">
                   <img

@@ -18,9 +18,10 @@
               <strong>|</strong>
             </span>
             <span>
-              <a href class>会员中心</a>
+              <!-- <a href class>会员中心</a> -->
+              <router-link to='/user'>会员中心</router-link>
               <strong>|</strong>
-              <a>退出</a>
+              <router-link to='/login'>退出</router-link>
               <strong>|</strong>
             </span>
             <a href class>
@@ -125,8 +126,19 @@
 </template>
 
 <script>
-
-export default {};
+// const id= this.$route.params.id;
+name:'detail'
+export default {
+  // data(){
+  //   return{
+  //     id:this.$route.params.id
+  //   }
+  // },
+  created(){
+ console.log(this.$route.params.id);
+  }
+ 
+};
 </script>
 
 <style>
