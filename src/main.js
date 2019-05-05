@@ -30,6 +30,8 @@ const routes=[
       path:'userOrder',component:userOrder
     },{
       path:'userDetail',component:userDetail
+    },{
+      path:'',redirect:'userCenter'
     }]
 },
 {path:'/login',component:login}
@@ -46,7 +48,7 @@ const router=new VueRouter({routes});
 // }
 import moment from 'moment';
 Vue.filter('formatTime',(value)=>{
- return moment(value).format('YYYY年MM月DD日');
+  moment(value).format('YYYY年MM月DD日');
 })
 
 Vue.config.productionTip = false

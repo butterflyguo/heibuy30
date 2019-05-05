@@ -78,15 +78,20 @@
               >
                 <ul>
                   <li>
-                    <a href="javascript:;" @click='isDesc=!isDesc' :class="{selected:isDesc}">商品介绍</a>
+                    <a href="javascript:;" @click="isDesc=!isDesc" :class="{selected:isDesc}">商品介绍</a>
                   </li>
                   <li>
-                    <a href="javascript:;" @click='isDesc=!isDesc' :class="{selected:!isDesc}"> 商品评论</a>
+                    <a href="javascript:;" @click="isDesc=!isDesc" :class="{selected:!isDesc}">商品评论</a>
                   </li>
                 </ul>
               </div>
-              <div class="tab-content entry" style="display: block;" v-html="goodsinfoContent" v-show='isDesc'></div>
-              <div class="tab-content" style="display: block;" v-show='!isDesc'>
+              <div
+                class="tab-content entry"
+                style="display: block;"
+                v-html="goodsinfoContent"
+                v-show="isDesc"
+              ></div>
+              <div class="tab-content" style="display: block;" v-show="!isDesc">
                 <div class="comment-box">
                   <div id="commentForm" name="commentForm" class="form-box">
                     <div class="avatar-box">
@@ -167,9 +172,10 @@
                       <!-- </a> -->
                     </div>
                     <div class="txt-box">
-                      <router-link :to="'/detail/'+value.id">{{ value.title }}
-                      <!-- <a href="#/site/goodsinfo/90" class>{{ value.title }}</a> -->
-                        </router-link>
+                      <router-link :to="'/detail/'+value.id">
+                        {{ value.title }}
+                        <!-- <a href="#/site/goodsinfo/90" class>{{ value.title }}</a> -->
+                      </router-link>
                       <span>{{ value.add_time | formatTime }}</span>
                     </div>
                   </li>
@@ -199,8 +205,8 @@ export default {
       commentList: [],
       imgList: [],
       goodsinfoContent: "",
-      num:'',
-      isDesc:true
+      num: "",
+      isDesc: true
     };
   },
   methods: {
@@ -220,11 +226,10 @@ export default {
               message: "恭喜你，评论成功",
               type: "success"
             });
+            this.comment = "";
+            this.pageIndex = 1;
+            this.getcomments();
           }
-
-          this.comment = "";
-          this.pageIndex = 1;
-          this.getcomments();
         });
     },
     getcomments() {
@@ -248,10 +253,9 @@ export default {
     },
     handleCurrentChange(val) {
       console.log(val);
-       this.pageIndex = val;
+      this.pageIndex = val;
       // this.pageSize = val;
       this.getcomments();
-      
     }
   },
   created() {
@@ -266,19 +270,19 @@ export default {
     });
   },
   //侦听器
-   watch: {
+  watch: {
     // 如果 `question` 发生改变，这个函数就会运行
-    "$route.params.id": function (ne, ol) {
-     this.$axios.get(`/site/goods/getgoodsinfo/${ne}`).then(res => {
-      // console.log(res);
-      this.goodsList = res.data.message.hotgoodslist;
-      this.goodsinfoContent = res.data.message.goodsinfo.content;
-      this.goodsinfo = res.data.message.goodsinfo;
-      this.imgList = res.data.message.imglist;
-      this.getcomments();
-    });
+    "$route.params.id": function(ne, ol) {
+      this.$axios.get(`/site/goods/getgoodsinfo/${ne}`).then(res => {
+        // console.log(res);
+        this.goodsList = res.data.message.hotgoodslist;
+        this.goodsinfoContent = res.data.message.goodsinfo.content;
+        this.goodsinfo = res.data.message.goodsinfo;
+        this.imgList = res.data.message.imglist;
+        this.getcomments();
+      });
     }
-  },
+  }
   // filters: {
   //   formatTime(value) {
   //     return moment(value).format("YYYY年MM月DD日");
